@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Anvaya Voice Chat Assistant</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Three.js 3D Background Canvas -->
+    <canvas id="threejs-canvas" class="threejs-background"></canvas>
+    
+    <!-- Particle System Overlay -->
+    <div id="particles-container" class="particles-overlay"></div>
+
+    <div class="app-shell">
+      <header class="app-header">
+        <div class="header-content">
+          <div class="brand">
+            <div class="brand-icon-wrapper">
+              <div class="brand-icon-3d" id="brand-icon-3d">
+                <div class="brand-icon">🎙️</div>
+              </div>
+              <div class="icon-pulse"></div>
+            </div>
+            <div class="brand-text">
+              <h1>Anvaya Voice Assistant</h1>
+              <p>Your intelligent AI companion</p>
+            </div>
+          </div>
+          <div class="header-controls">
+            <div class="control-group">
+              <label class="language-picker" for="language-select">
+                <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="2" y1="12" x2="22" y2="12"></line>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                </svg>
+                <select id="language-select" aria-label="Select language">
+                  <option value="en">English</option>
+                  <option value="hi">हिंदी</option>
+                </select>
+              </label>
+            </div>
+            <div class="status-badge">
+              <span id="status-indicator" class="status-indicator offline"></span>
+              <span id="status-label">Connecting...</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section class="chat-container" id="chat-container">
+          <div class="welcome-screen" id="welcome-screen">
+            <div class="welcome-3d-container">
+              <div class="welcome-icon-3d" id="welcome-icon-3d">✨</div>
+            </div>
+            <h2>Welcome to Anvaya Assistant</h2>
+            <p>Ask me anything using your voice or type your message below</p>
+            <div class="feature-tags">
+              <span class="tag tag-3d" style="--tag-index: 0">🎤 Voice Input</span>
+              <span class="tag tag-3d" style="--tag-index: 1">💬 Text Chat</span>
+              <span class="tag tag-3d" style="--tag-index: 2">🌐 Multi-language</span>
+              <span class="tag tag-3d" style="--tag-index: 3">🤖 AI Powered</span>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="input-footer">
+        <div class="input-wrapper">
+          <button id="mic-button" class="mic-button mic-button-3d">
+            <div class="mic-icon-wrapper">
+              <svg class="mic-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                <line x1="12" y1="19" x2="12" y2="23"></line>
+                <line x1="8" y1="23" x2="16" y2="23"></line>
+              </svg>
+              <div class="mic-ripple"></div>
+              <div class="mic-particles" id="mic-particles"></div>
+            </div>
+            <span class="mic-label">Tap to speak</span>
+          </button>
+          <div class="divider-line">
+            <span>or</span>
+          </div>
+          <form id="text-form" class="text-form">
+            <div class="input-container input-container-3d">
+              <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+              <input
+                type="text"
+                id="text-input"
+                placeholder="Type your message here..."
+                aria-label="Type your question"
+              />
+              <button type="submit" class="send-button send-button-3d">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="22" y1="2" x2="11" y2="13"></line>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+              </button>
+            </div>
+          </form>
+        </div>
+      </footer>
+    </div>
+
+    <template id="message-template">
+      <article class="message message-3d">
+        <div class="message-avatar">
+          <div class="avatar-glow"></div>
+          <div class="avatar-3d-effect"></div>
+        </div>
+        <div class="message-content">
+          <header class="message-header"></header>
+          <div class="message-text"></div>
+        </div>
+      </article>
+    </template>
+
+    <div id="toast" class="toast"></div>
+
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- Three.js Scene Script -->
+    <script src="/static/threejs-scene.js"></script>
+    <!-- Enhanced Animations -->
+    <script src="/static/animations.js"></script>
+    <script src="/static/app.js" type="module"></script>
+  </body>
+</html>

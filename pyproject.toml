@@ -3,11 +3,11 @@ requires = ["setuptools>=65", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "riverwood-voice-agent"
+name = "anvaya-voice-agent"
 version = "0.1.0"
-description = "Riverwood AI voice agent with Whisper transcription and Groq chat integration"
+description = "Anvaya AI voice agent with Whisper transcription and Groq chat integration"
 readme = "README.md"
-authors = [{name = "Riverwood Projects"}]
+authors = [{name = "Anvaya"}]
 license = {text = "Proprietary"}
 requires-python = ">=3.9"
 dependencies = [
@@ -32,7 +32,7 @@ dev = [
 ]
 
 [project.scripts]
-riverwood-agent = "riverwood_voice_agent.cli:app"
+anvaya-agent = "anvaya_voice_agent.cli:app"
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -42,5 +42,5 @@ line-length = 100
 
 [tool.mypy]
 python_version = "3.9"
-packages = ["riverwood_voice_agent"]
+packages = ["anvaya_voice_agent"]
 ignore_missing_imports = true
