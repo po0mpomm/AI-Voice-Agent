@@ -86,13 +86,29 @@ async def transcribe_audio(
 
     try:
         buffer = io.BytesIO(await file.read())
+        file_size = len(buffer.getvalue())
+        logger.info(f"Received audio file: {file.content_type}, size: {file_size} bytes, language: {language}")
+        
+        if file_size == 0:
+            raise HTTPException(status_code=400, detail="Empty audio file received")
+        
         text = await client.transcribe_audio(
             buffer,
             file.content_type or "audio/webm",
             language,
         )
+        
+        if not text or not text.strip():
+            raise HTTPException(status_code=400, detail="Transcription returned empty result. Please try again.")
+        
+        logger.info(f"Transcription successful: {len(text)} characters")
         return TranscriptionResponse(text=text)
+    except HTTPException:
+        raise
+    except ValueError as ve:
+        logger.exception(f"Value error during transcription: {ve}")
+        raise HTTPException(status_code=400, detail=str(ve)) from ve
     except Exception as exc:
         logger.exception("Error during transcription")
-        raise HTTPException(status_code=500, detail=str(exc)) from exc
+        raise HTTPException(status_code=500, detail=f"Transcription failed: {str(exc)}") from exc
 

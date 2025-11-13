@@ -1,5 +1,6 @@
 import base64
 import io
+import logging
 from typing import Iterable, List
 
 import httpx
@@ -7,6 +8,8 @@ from fastapi import Depends
 
 from ..config import Settings, get_settings
 from ..schemas import ChatMessage
+
+logger = logging.getLogger(__name__)
 
 GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1"
 
@@ -60,7 +63,15 @@ class GeminiClient:
             {"contents": [prompt]},
             timeout=90,
         )
-        return self._extract_text(data)
+        
+        logger.debug(f"Gemini transcription response received: {data}")
+        result = self._extract_text(data)
+        
+        if not result or not result.strip():
+            logger.warning("Gemini transcription returned empty result")
+            raise ValueError("Transcription returned empty result. Please try speaking again.")
+        
+        return result
 
     async def _post(self, endpoint: str, payload: dict, timeout: int) -> dict:
         try:
@@ -92,14 +103,41 @@ class GeminiClient:
         return serialized
 
     def _extract_text(self, payload: dict) -> str:
-        candidates = payload.get("candidates", [])
-        for candidate in candidates:
-            content = candidate.get("content", {})
-            parts = content.get("parts", [])
-            texts = [part.get("text") for part in parts if part.get("text")]
-            if texts:
-                return "\n".join(texts).strip()
-        raise ValueError("Gemini response did not include text output.")
+        try:
+            candidates = payload.get("candidates", [])
+            if not candidates:
+                logger.error(f"No candidates in Gemini response: {payload}")
+                raise ValueError("Gemini API returned no candidates in response.")
+            
+            for candidate in candidates:
+                if "content" not in candidate:
+                    continue
+                    
+                content = candidate.get("content", {})
+                parts = content.get("parts", [])
+                
+                if not parts:
+                    continue
+                
+                texts = []
+                for part in parts:
+                    if isinstance(part, dict) and "text" in part:
+                        text = part.get("text")
+                        if text and isinstance(text, str):
+                            texts.append(text)
+                
+                if texts:
+                    result = "\n".join(texts).strip()
+                    if result:
+                        return result
+            
+            logger.error(f"Unable to extract text from Gemini response: {payload}")
+            raise ValueError("Gemini API response did not contain valid text output.")
+        except ValueError:
+            raise
+        except Exception as e:
+            logger.exception(f"Unexpected error extracting text from Gemini response: {e}")
+            raise ValueError(f"Failed to parse Gemini API response: {str(e)}") from e
 
     def _extract_error_message(self, response: httpx.Response) -> str:
         fallback = f"Gemini API error ({response.status_code})"
