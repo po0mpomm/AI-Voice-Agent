@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: anvaya-voice-assistant
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.app:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_CHAT_MODEL
+        value: gemini-2.5-flash
+      - key: GEMINI_STT_MODEL
+        value: gemini-2.5-flash
+      - key: LOGGING_LEVEL
+        value: INFO
+
