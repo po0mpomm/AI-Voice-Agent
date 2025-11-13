@@ -45,7 +45,6 @@ if ("speechSynthesis" in window) {
   const loadVoices = () => {
     availableVoices = window.speechSynthesis.getVoices();
     voicesLoaded = availableVoices.length > 0;
-    // Log available voices for debugging
     if (availableVoices.length > 0) {
       console.log("Available voices:", availableVoices.map(v => ({ name: v.name, lang: v.lang })));
       const hindiVoices = availableVoices.filter(v => 
@@ -63,8 +62,6 @@ if ("speechSynthesis" in window) {
 
   window.speechSynthesis.addEventListener("voiceschanged", loadVoices);
   loadVoices();
-  
-  // Also try loading voices after a short delay (some browsers load voices asynchronously)
   setTimeout(loadVoices, 1000);
 }
 
@@ -124,14 +121,12 @@ function addMessage(role, content, language = currentLanguage) {
   const copy = languageCopy[language] ?? languageCopy.en;
   header.textContent = role === "user" ? copy.user : copy.assistant;
   
-  // Set avatar content with emoji or initial
   if (role === "user") {
     avatar.textContent = "👤";
   } else {
     avatar.textContent = "🤖";
   }
 
-  // Hide welcome screen if it exists
   const welcomeScreen = document.getElementById("welcome-screen");
   if (welcomeScreen) {
     welcomeScreen.style.display = "none";
@@ -139,14 +134,12 @@ function addMessage(role, content, language = currentLanguage) {
 
   chatContainer.appendChild(clone);
   
-  // Animated typing effect for assistant messages
   if (role === "assistant" && window.animations && window.animations.typeWriter) {
     window.animations.typeWriter(textDiv, content, 20);
   } else {
     textDiv.textContent = content;
   }
   
-  // Add entrance animation
   message.style.animation = "messageSlideIn3D 0.6s ease-out forwards";
   
   chatContainer.scrollTo({
@@ -154,7 +147,6 @@ function addMessage(role, content, language = currentLanguage) {
     behavior: "smooth",
   });
   
-  // Add pulse effect to avatar
   setTimeout(() => {
     avatar.style.animation = "avatarPulse 1s ease-out";
     setTimeout(() => {
@@ -206,10 +198,8 @@ function speak(text, language = currentLanguage, attempt = 0) {
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = locale;
 
-  // Try to find Hindi voice with multiple language code variations
   let matchingVoice = null;
   if (language === "hi") {
-    // Try different Hindi language codes
     const hindiCodes = ["hi-IN", "hi", "hi-in", "hin"];
     for (const code of hindiCodes) {
       matchingVoice = availableVoices.find((option) =>
@@ -218,7 +208,6 @@ function speak(text, language = currentLanguage, attempt = 0) {
       if (matchingVoice) break;
     }
     
-    // Also check voice names for Hindi indicators
     if (!matchingVoice) {
       matchingVoice = availableVoices.find((option) => {
         const name = option.name?.toLowerCase() || "";
@@ -235,14 +224,12 @@ function speak(text, language = currentLanguage, attempt = 0) {
     utterance.voice = matchingVoice;
     utterance.lang = matchingVoice.lang || locale;
   } else {
-    // For Hindi, don't fallback to English - it won't work well
     if (language === "hi") {
       showToast("Hindi voice not available. Please install a Hindi TTS voice pack in your system settings, or use English language for voice responses.");
       console.log("Available voices:", availableVoices.map(v => ({ name: v.name, lang: v.lang })));
-      return; // Don't try to speak Hindi with English voice
+      return;
     }
     
-    // For other languages, fallback to English
     const fallback = availableVoices.find((option) => option.lang?.toLowerCase().startsWith("en"));
     if (fallback) {
       utterance.voice = fallback;
@@ -354,14 +341,12 @@ async function toggleRecording() {
 
 micButton.addEventListener("click", () => {
   toggleRecording();
-  // Add visual feedback
   micButton.style.transform = "scale(0.95)";
   setTimeout(() => {
     micButton.style.transform = "";
   }, 150);
 });
 
-// Add hover effects
 micButton.addEventListener("mouseenter", () => {
   micButton.style.transform = "translateY(-5px) scale(1.1)";
   micButton.style.boxShadow = "0 15px 40px rgba(102, 126, 234, 0.6), 0 0 60px rgba(102, 126, 234, 0.4)";
@@ -411,7 +396,6 @@ function resetConversation() {
   conversationId = crypto.randomUUID();
   chatContainer.innerHTML = "";
   
-  // Show welcome screen again
   const welcomeScreen = document.getElementById("welcome-screen");
   if (welcomeScreen) {
     welcomeScreen.style.display = "flex";

@@ -1,8 +1,6 @@
-// Three.js 3D Scene for Anvaya Voice Assistant
 (function() {
   'use strict';
   
-  // Wait for Three.js to be available
   function initThreeJS() {
     if (typeof THREE === 'undefined') {
       console.log('⏳ Waiting for Three.js to load...');
@@ -17,14 +15,12 @@
     let windowHalfX = window.innerWidth / 2;
     let windowHalfY = window.innerHeight / 2;
 
-    // Initialize Three.js Scene
     const canvas = document.getElementById('threejs-canvas');
     if (!canvas) {
       setTimeout(initThreeJS, 100);
       return;
     }
 
-    // Scene setup
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     renderer = new THREE.WebGLRenderer({ 
@@ -36,10 +32,8 @@
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setClearColor(0x000000, 0);
 
-    // Camera position
     camera.position.z = 5;
 
-    // Create floating geometric shapes
     const shapes = [];
     const geometryTypes = [
       new THREE.IcosahedronGeometry(0.3, 0),
@@ -81,11 +75,9 @@
       shapes.push(mesh);
     }
 
-    // Add ambient light
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
 
-    // Add directional lights - more subtle and classy
     const light1 = new THREE.DirectionalLight(0x6366f1, 0.5);
     light1.position.set(5, 5, 5);
     scene.add(light1);
@@ -98,7 +90,6 @@
     light3.position.set(0, 5, -5);
     scene.add(light3);
 
-    // Create particle system
     const particleCount = 2000;
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
@@ -129,7 +120,6 @@
     particleSystem = new THREE.Points(geometry, material);
     scene.add(particleSystem);
 
-    // Create animated rings
     const rings = [];
     const ringGeometry = new THREE.RingGeometry(2, 2.5, 64);
     const ringMaterial = new THREE.MeshBasicMaterial({
@@ -151,7 +141,6 @@
       rings.push(ring);
     }
 
-    // Mouse movement tracking
     function onMouseMove(event) {
       mouseX = (event.clientX - windowHalfX) * 0.01;
       mouseY = (event.clientY - windowHalfY) * 0.01;
@@ -169,11 +158,9 @@
     document.addEventListener('mousemove', onMouseMove, false);
     window.addEventListener('resize', onWindowResize, false);
 
-    // Animation loop
     function animate() {
       requestAnimationFrame(animate);
 
-      // Animate floating shapes - more visible movement
       shapes.forEach((shape, index) => {
         shape.rotation.x += shape.userData.rotationSpeed.x * 2;
         shape.rotation.y += shape.userData.rotationSpeed.y * 2;
@@ -184,7 +171,6 @@
         shape.position.z += Math.sin(Date.now() * shape.userData.speed * 0.5 + index) * 0.01;
       });
 
-      // Animate particle system - more visible movement
       if (particleSystem) {
         particleSystem.rotation.y += 0.003;
         particleSystem.rotation.x += 0.001;
@@ -196,18 +182,15 @@
         particleSystem.geometry.attributes.position.needsUpdate = true;
       }
 
-      // Animate rings
       rings.forEach((ring, index) => {
         ring.rotation.z += ring.userData.rotationSpeed;
         ring.position.z = ring.userData.initialZ + Math.sin(Date.now() * 0.0005 + index) * 0.5;
       });
 
-      // Camera movement based on mouse - more responsive
       camera.position.x += (mouseX * 2 - camera.position.x) * 0.1;
       camera.position.y += (-mouseY * 2 - camera.position.y) * 0.1;
       camera.lookAt(scene.position);
       
-      // Add subtle camera rotation
       camera.rotation.z = Math.sin(Date.now() * 0.0005) * 0.05;
 
       renderer.render(scene, camera);
@@ -217,7 +200,6 @@
     console.log('✅ Three.js scene initialized and animating!');
   }
 
-  // Initialize when DOM is ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initThreeJS);
   } else {

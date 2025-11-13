@@ -1,5 +1,4 @@
 :root {
-  /* Soothing Color Palette */
   --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
   --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
@@ -25,7 +24,6 @@
   --radius-lg: 16px;
   --radius-xl: 24px;
   
-  /* 3D Effect Variables */
   --shadow-3d: 0 8px 32px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.08);
   --shadow-3d-hover: 0 16px 48px rgba(102, 126, 234, 0.25), 0 8px 24px rgba(102, 126, 234, 0.15);
   --shadow-3d-inset: inset 0 2px 8px rgba(0, 0, 0, 0.1), inset 0 1px 4px rgba(0, 0, 0, 0.06);
@@ -64,7 +62,6 @@ body {
   padding: 20px;
 }
 
-/* Three.js Canvas Background */
 .threejs-background {
   position: fixed;
   top: 0;
@@ -78,7 +75,6 @@ body {
   mix-blend-mode: screen;
 }
 
-/* Floating Particles */
 .floating-particle {
   position: absolute;
   width: 6px;
@@ -110,7 +106,6 @@ body {
   }
 }
 
-/* Cursor Trail */
 .cursor-trail {
   position: fixed;
   width: 20px;
@@ -124,7 +119,6 @@ body {
   border: 1px solid rgba(99, 102, 241, 0.3);
 }
 
-/* Ripple Effect */
 .ripple-effect {
   position: absolute;
   border-radius: 50%;
@@ -173,7 +167,6 @@ body {
   }
 }
 
-/* Animated Background */
 .bg-animation {
   position: fixed;
   top: 0;
@@ -234,7 +227,6 @@ body {
   66% { transform: translate(-20px, 20px) rotate(240deg); }
 }
 
-/* App Shell */
 .app-shell {
   width: min(100%, 1200px);
   max-height: 95vh;
@@ -271,7 +263,6 @@ body {
   box-shadow: var(--shadow-3d-hover), 0 0 80px rgba(102, 126, 234, 0.3);
 }
 
-/* Header */
 .app-header {
   padding: 24px 32px;
   background: var(--primary-gradient);
@@ -477,7 +468,6 @@ body {
   50% { opacity: 0.6; }
 }
 
-/* Main Chat Area */
 main {
   flex: 1;
   overflow: hidden;
@@ -513,7 +503,6 @@ main {
   background: var(--text-light);
 }
 
-/* Welcome Screen */
 .welcome-screen {
   display: flex;
   flex-direction: column;
@@ -658,7 +647,6 @@ main {
   }
 }
 
-/* Messages */
 .message {
   display: flex;
   gap: 16px;
@@ -832,7 +820,6 @@ main {
   border: 1px solid var(--border-light);
 }
 
-/* Input Footer */
 .input-footer {
   padding: 24px 32px;
   background: var(--bg-glass-strong);
@@ -1112,7 +1099,6 @@ main {
   transform: translateY(0) scale(0.95);
 }
 
-/* Toast */
 .toast {
   position: fixed;
   left: 50%;
@@ -1140,7 +1126,6 @@ main {
   opacity: 1;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   body {
     padding: 0;
@@ -1197,7 +1182,6 @@ main {
   }
 }
 
-/* Hide welcome screen when messages exist */
 .chat-container:has(.message) .welcome-screen {
   display: none;
 }

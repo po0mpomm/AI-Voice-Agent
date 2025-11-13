@@ -1,6 +1,4 @@
-// Enhanced Animations and Interactive Effects for Anvaya Voice Assistant
 
-// Floating particles effect
 function createFloatingParticles() {
   const particlesContainer = document.getElementById('particles-container');
   if (!particlesContainer) {
@@ -8,7 +6,6 @@ function createFloatingParticles() {
     return;
   }
 
-  // Clear existing particles
   particlesContainer.innerHTML = '';
 
   for (let i = 0; i < 60; i++) {
@@ -25,13 +22,9 @@ function createFloatingParticles() {
   console.log('Created', particlesContainer.children.length, 'floating particles');
 }
 
-// Animated gradient background - more subtle
 function animateGradient() {
-  // Removed aggressive color shifting - using static elegant background instead
-  // The CSS already has a beautiful static gradient
 }
 
-// Interactive cursor trail
 function createCursorTrail() {
   const trail = [];
   const trailLength = 20;
@@ -72,7 +65,6 @@ function createCursorTrail() {
   animateTrail();
 }
 
-// Animated typing effect for messages
 function typeWriter(element, text, speed = 30) {
   let i = 0;
   element.textContent = '';
@@ -88,7 +80,6 @@ function typeWriter(element, text, speed = 30) {
   type();
 }
 
-// Pulse animation for recording button
 function animateRecordingButton(button) {
   if (!button) return;
   
@@ -108,7 +99,6 @@ function animateRecordingButton(button) {
   }, 50);
 }
 
-// Floating animation for welcome screen
 function animateWelcomeScreen() {
   const welcomeIcon = document.getElementById('welcome-icon-3d');
   if (!welcomeIcon) return;
@@ -133,7 +123,6 @@ function animateWelcomeScreen() {
   }, 50);
 }
 
-// Ripple effect on click
 function createRippleEffect(element) {
   element.addEventListener('click', function(e) {
     const ripple = document.createElement('span');
@@ -154,7 +143,6 @@ function createRippleEffect(element) {
   });
 }
 
-// Glow effect on hover
 function addGlowEffect(selector) {
   const elements = document.querySelectorAll(selector);
   elements.forEach(el => {
@@ -170,28 +158,23 @@ function addGlowEffect(selector) {
   });
 }
 
-// Initialize all animations
 function initAllAnimations() {
   console.log('🎨 Initializing animations...');
   
-  // Wait a bit for DOM to be fully ready
   setTimeout(() => {
     createFloatingParticles();
     animateGradient();
     createCursorTrail();
     animateWelcomeScreen();
     
-    // Add ripple effects to buttons
     const buttons = document.querySelectorAll('button, .tag, .message-content');
     buttons.forEach(createRippleEffect);
     console.log('Added ripple effects to', buttons.length, 'elements');
     
-    // Add glow effects
     addGlowEffect('.mic-button');
     addGlowEffect('.send-button');
     addGlowEffect('.tag');
     
-    // Animate recording button
     const micButton = document.getElementById('mic-button');
     if (micButton) {
       const observer = new MutationObserver(() => {
@@ -204,14 +187,12 @@ function initAllAnimations() {
   }, 100);
 }
 
-// Initialize when DOM is ready
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initAllAnimations);
 } else {
   initAllAnimations();
 }
 
-// Export for use in app.js
 window.animations = {
   typeWriter,
   createRippleEffect,
