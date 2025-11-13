@@ -225,8 +225,7 @@ function speak(text, language = currentLanguage, attempt = 0) {
     utterance.lang = matchingVoice.lang || locale;
   } else {
     if (language === "hi") {
-      showToast("Hindi voice not available. Please install a Hindi TTS voice pack in your system settings, or use English language for voice responses.");
-      console.log("Available voices:", availableVoices.map(v => ({ name: v.name, lang: v.lang })));
+      console.log("Hindi voice not available. Skipping voice output. Available voices:", availableVoices.map(v => ({ name: v.name, lang: v.lang })));
       return;
     }
     
